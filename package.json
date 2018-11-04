@@ -2,8 +2,8 @@
   "name": "sjink-v4",
   "version": "1.0.2",
   "main": "index.js",
-  "license": "UNLICENSED",
-  "private": true,
+  "license": "MIT",
+  "private": false,
   "dependencies": {
     "@loadable/component": "^4.0.2",
     "@loadable/server": "^4.0.5",
