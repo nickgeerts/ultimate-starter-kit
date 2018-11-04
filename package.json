@@ -1,0 +1,52 @@
+{
+  "name": "sjink-v4",
+  "version": "1.0.2",
+  "main": "index.js",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@loadable/component": "^4.0.2",
+    "@loadable/server": "^4.0.5",
+    "dotenv": "*",
+    "express": "^4.16.4",
+    "react": "^16.6.0",
+    "react-dom": "^16.6.0",
+    "react-helmet": "^5.2.0",
+    "react-router-dom": "^4.3.1",
+    "smoothscroll-polyfill": "*"
+  },
+  "scripts": {
+    "dev": "BABEL_ENV=client webpack --mode development --watch",
+    "start": "BABEL_ENV=server nodemon --exec babel-node -- --extensions '.ts,.tsx' ./server/index.tsx",
+    "build-client": "BABEL_ENV=client webpack --mode production",
+    "build": "yarn run clean && yarn run build-client",
+    "clean": "rm -rf dist/client",
+    "serve": "BABEL_ENV=server babel-node --extensions '.ts,.tsx' ./server/index.tsx",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@babel/core": "*",
+    "@babel/node": "*",
+    "@babel/plugin-proposal-class-properties": "*",
+    "@babel/plugin-syntax-dynamic-import": "*",
+    "@babel/preset-env": "*",
+    "@babel/preset-react": "*",
+    "@babel/preset-typescript": "*",
+    "@babel/runtime": "*",
+    "@loadable/babel-plugin": "^4.0.5",
+    "@loadable/webpack-plugin": "^4.0.5",
+    "@types/express": "*",
+    "@types/react": "*",
+    "@types/react-dom": "*",
+    "@types/react-router-dom": "*",
+    "@types/webpack-env": "*",
+    "babel-loader": "*",
+    "babel-plugin-dynamic-import-node": "*",
+    "babel-plugin-module-resolver": "*",
+    "node-sass": "*",
+    "nodemon": "*",
+    "typescript": "*",
+    "webpack": "^4.23.1",
+    "webpack-cli": "*"
+  }
+}

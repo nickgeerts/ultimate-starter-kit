@@ -1,0 +1,11 @@
+# Node.js
+.env
+/node_modules
+/dist
+yarn-error.log
+
+# Temp
+/tmp
+
+# macOS
+.DS_Store
