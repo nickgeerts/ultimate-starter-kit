@@ -3,7 +3,7 @@ import React from 'react'
 import express from 'express'
 import path from 'path'
 import ReactDOM from 'react-dom/server'
-import { LoadableState, LoadableStateManager } from '@loadable/server'
+import { ChunkExtractor } from '@loadable/server'
 import { Helmet } from 'react-helmet'
 
 import App from 'client/app/App'
@@ -15,8 +15,7 @@ import globalStyling from 'client/helpers/globalStyling'
 const app = express()
 const distDir = path.join(__dirname, '../dist/client')
 const staticDir = path.join(__dirname, '../static')
-const data = fs.readFileSync('dist/client/loadable-manifest.json')
-const manifest = JSON.parse(data as any)
+const statsFile = path.join(__dirname, '../dist/client/loadable-stats.json')
 
 app.use(express.static(distDir))
 app.use(express.static(staticDir))
@@ -40,15 +39,10 @@ Object.entries(routes).forEach(([route, dataLoader]) => {
   })
 
   app.get(route, async (req, res) => {
+    const extractor = new ChunkExtractor({ statsFile })
     const initialProps = dataLoader ? await dataLoader(req.params) : {}
-    const loadableState = new LoadableState(manifest)
-    const clientApp = (
-      <LoadableStateManager state={loadableState}>
-        <App path={req.path} initialProps={initialProps} />
-      </LoadableStateManager>
-    )
-
-    const prerender = ReactDOM.renderToString(clientApp)
+    const jsx = extractor.collectChunks(<App path={req.path} initialProps={initialProps} />)
+    const html = ReactDOM.renderToString(jsx)
     const helmet = Helmet.renderStatic()
 
     const view = `
@@ -62,10 +56,9 @@ Object.entries(routes).forEach(([route, dataLoader]) => {
           ${helmet.meta.toString()}
         </head>
         <body>
-          <div id="app">${prerender}</div>
+          <div id="app">${html}</div>
           <script>window.__INITIAL_PROPS__ = ${JSON.stringify(initialProps)}</script>
-          ${loadableState.getScriptTags()}
-          <script src="/bundle.js"></script>
+          ${extractor.getScriptTags()}
         </body>
       </html>
     `
